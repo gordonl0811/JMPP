@@ -4,10 +4,10 @@ A lightweight Java library for processing network packets.
 
 ## Documentation
 
-- Overview
-- User Guide
-- Benchmarks
-- Future Work
+- [Overview](#overview)
+- [User Guide](#user-guide)
+- [Benchmarks](#benchmarks)
+- [Future Work](#future-work)
 
 ## Overview
 
