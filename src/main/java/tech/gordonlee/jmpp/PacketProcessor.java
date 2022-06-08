@@ -1,4 +1,4 @@
-package tech.gordonlee.PacketProcessor;
+package tech.gordonlee.jmpp;
 
 /**
  * Packet Processors tie together the JMPP components
@@ -12,6 +12,7 @@ public interface PacketProcessor {
 
     /**
      * Start the processor, allowing the readers to produce packets from their sources.
+     *
      * @throws InterruptedException
      */
     void start() throws InterruptedException;

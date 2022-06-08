@@ -1,18 +1,18 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components;
+package tech.gordonlee.jmpp.components;
 
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.PcapOutputStream;
 import io.pkts.frame.PcapGlobalHeader;
 import io.pkts.packet.Packet;
+import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class Writer extends ProcessorComponent {
+public class Writer extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final PcapOutputStream output;

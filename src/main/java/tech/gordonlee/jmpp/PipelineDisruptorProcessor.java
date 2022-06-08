@@ -1,19 +1,19 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor;
+package tech.gordonlee.jmpp;
 
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components.Dropper;
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components.LayerFourPortRewriter;
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+import tech.gordonlee.jmpp.components.Component;
+import tech.gordonlee.jmpp.components.Dropper;
+import tech.gordonlee.jmpp.components.LayerFourPortRewriter;
+import tech.gordonlee.jmpp.sources.PcapReader;
+import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
 import java.util.List;
 
-public class PipelineDisruptorProcessor extends AbstractDisruptorProcessor {
+public class PipelineDisruptorProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final LayerFourPortRewriter rewriter;
@@ -39,7 +39,7 @@ public class PipelineDisruptorProcessor extends AbstractDisruptorProcessor {
     }
 
     @Override
-    protected List<ProcessorComponent> setComponents() {
+    protected List<Component> setComponents() {
         return List.of(rewriter, dropper);
     }
 

@@ -1,15 +1,15 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components;
+package tech.gordonlee.jmpp.components;
 
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
+import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
 
-import static tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class Filter extends ProcessorComponent {
+public class Filter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> tcpDisruptor;

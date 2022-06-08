@@ -1,12 +1,12 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components;
+package tech.gordonlee.jmpp.components;
 
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.EventHandler;
 import io.pkts.packet.Packet;
+import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
 
-public abstract class ProcessorComponent implements EventHandler<PacketEvent> {
+public abstract class Component implements EventHandler<PacketEvent> {
 
     private long packetCount = 0;
 

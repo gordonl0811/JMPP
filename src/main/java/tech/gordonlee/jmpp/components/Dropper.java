@@ -1,12 +1,12 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.components;
+package tech.gordonlee.jmpp.components;
 
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.Packet;
+import tech.gordonlee.jmpp.utils.PacketEvent;
 
-import static tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class Dropper extends ProcessorComponent {
+public class Dropper extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
 

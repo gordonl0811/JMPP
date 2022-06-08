@@ -1,4 +1,4 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils;
+package tech.gordonlee.jmpp.utils;
 
 import com.lmax.disruptor.dsl.Disruptor;
 

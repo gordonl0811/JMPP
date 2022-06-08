@@ -1,12 +1,12 @@
-package tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.sources;
+package tech.gordonlee.jmpp.sources;
 
-import tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.Pcap;
+import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
 
-import static tech.gordonlee.PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
 public class PcapReader {
 
