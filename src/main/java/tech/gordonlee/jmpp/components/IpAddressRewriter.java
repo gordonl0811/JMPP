@@ -2,6 +2,7 @@ package tech.gordonlee.jmpp.components;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.IPPacket;
+import io.pkts.packet.IPv4Packet;
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
 import tech.gordonlee.jmpp.utils.PacketEvent;
@@ -59,6 +60,10 @@ public class IpAddressRewriter extends Component {
         }
         if (dstAddr != null) {
             layerThreePacket.setDestinationIP(dstAddr);
+        }
+
+        if (layerThreeProtocol == Protocol.IPv4) {
+            ((IPv4Packet) layerThreePacket).reCalculateChecksum();
         }
 
         outputDisruptor.publishEvent((event, sequence) -> event.setValue(packet));

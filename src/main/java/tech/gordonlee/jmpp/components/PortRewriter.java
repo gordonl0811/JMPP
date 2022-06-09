@@ -64,6 +64,8 @@ public class PortRewriter extends Component {
             layerFourPacket.setDestinationPort(dstPort);
         }
 
+        // TODO: Checksums need to be recalculated, but the library does not support this.
+
         outputDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
     }
 }
