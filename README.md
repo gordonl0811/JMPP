@@ -1,6 +1,6 @@
 # Java Modular Packet Processor
 
-A lightweight Java library for processing network packets.
+A lightweight Java library for processing network packets with a user-defined graph of individual processing operations.
 
 ## Documentation
 
@@ -20,6 +20,14 @@ The project is not built for production, but instead has a broader objective tha
 JMPP is also built on the lightweight [pkts.io Java library developed by aboutsip](https://github.com/aboutsip/pkts).
 
 ## User Guide
+
+### Disruptors
+
+### Readers
+
+### Components
+
+### Processors
 
 ## Benchmarks
 
