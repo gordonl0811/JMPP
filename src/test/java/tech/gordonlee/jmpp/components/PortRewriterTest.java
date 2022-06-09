@@ -46,7 +46,6 @@ public class PortRewriterTest {
 
         reader.start();
 
-        // Test will be successful if it terminates
         while (writer.getPacketCount() != MULTIPLE_PACKET_PCAP_COUNT) {
             TimeUnit.MILLISECONDS.sleep(1);
         }
