@@ -23,7 +23,7 @@ public class WriterTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    @Test
+    @Test(timeout = 3000)
     public void WriterCopiesSinglePacketExactly() throws IOException, InterruptedException {
         File outputPcap = folder.newFile("output.pcap");
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, 1, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
@@ -46,7 +46,7 @@ public class WriterTest {
 
     }
 
-    @Test
+    @Test(timeout = 3000)
     public void WriterHandlesMultiplePackets() throws IOException, InterruptedException {
         File outputPcap = folder.newFile("output.pcap");
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, 10, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
