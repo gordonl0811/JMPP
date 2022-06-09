@@ -15,7 +15,7 @@ import tech.gordonlee.jmpp.utils.PacketEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class FilterRewriteJoinDisruptorProcessor extends AbstractPacketProcessor {
+public class FilterRewriteJoinProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final TcpUdpFilter filter;
@@ -25,7 +25,7 @@ public class FilterRewriteJoinDisruptorProcessor extends AbstractPacketProcessor
 
     private final long expectedPackets;
 
-    public FilterRewriteJoinDisruptorProcessor(int bufferSize, String source, int tcpSrcPort, int tcpDstPort, int udpSrcPort, int udpDstPort, long expectedPackets) throws IOException {
+    public FilterRewriteJoinProcessor(int bufferSize, String source, int tcpSrcPort, int tcpDstPort, int udpSrcPort, int udpDstPort, long expectedPackets) throws IOException {
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
@@ -56,7 +56,7 @@ public class FilterRewriteJoinDisruptorProcessor extends AbstractPacketProcessor
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        FilterRewriteJoinDisruptorProcessor processor = new FilterRewriteJoinDisruptorProcessor(
+        FilterRewriteJoinProcessor processor = new FilterRewriteJoinProcessor(
                 1024,
                 "src/main/resources/input_thousand.pcap",
                 12,

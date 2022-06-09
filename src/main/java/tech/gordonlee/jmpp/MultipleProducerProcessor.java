@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class MultipleProducerDisruptorProcessor extends AbstractPacketProcessor {
+public class MultipleProducerProcessor extends AbstractPacketProcessor {
 
     private final PcapReader readerOne;
     private final PcapReader readerTwo;
@@ -23,7 +23,7 @@ public class MultipleProducerDisruptorProcessor extends AbstractPacketProcessor 
 
     private final long expectedPackets;
 
-    public MultipleProducerDisruptorProcessor(int bufferSize, String sourceOne, String sourceTwo, String sourceThree, int expectedPackets) throws IOException {
+    public MultipleProducerProcessor(int bufferSize, String sourceOne, String sourceTwo, String sourceThree, int expectedPackets) throws IOException {
         Disruptor<PacketEvent> sharedDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new YieldingWaitStrategy());
 
         this.readerOne = new PcapReader(sourceOne, sharedDisruptor);
@@ -51,7 +51,7 @@ public class MultipleProducerDisruptorProcessor extends AbstractPacketProcessor 
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        MultipleProducerDisruptorProcessor processor = new MultipleProducerDisruptorProcessor(
+        MultipleProducerProcessor processor = new MultipleProducerProcessor(
                 1024,
                 "src/main/resources/example_one.pcap",
                 "src/main/resources/example_two.pcap",

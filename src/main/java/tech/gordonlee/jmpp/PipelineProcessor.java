@@ -14,7 +14,7 @@ import tech.gordonlee.jmpp.utils.PacketEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class PipelineDisruptorProcessor extends AbstractPacketProcessor {
+public class PipelineProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final PortRewriter rewriter;
@@ -22,7 +22,7 @@ public class PipelineDisruptorProcessor extends AbstractPacketProcessor {
 
     private final long expectedPackets;
 
-    public PipelineDisruptorProcessor(int bufferSize, String source, int srcPort, int dstPort, long expectedPackets) throws IOException {
+    public PipelineProcessor(int bufferSize, String source, int srcPort, int dstPort, long expectedPackets) throws IOException {
 
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());

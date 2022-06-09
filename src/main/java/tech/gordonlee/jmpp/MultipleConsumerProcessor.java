@@ -13,7 +13,7 @@ import tech.gordonlee.jmpp.utils.PacketEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class MultipleConsumerDisruptorProcessor extends AbstractPacketProcessor {
+public class MultipleConsumerProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final Dropper consumerOne;
@@ -22,7 +22,7 @@ public class MultipleConsumerDisruptorProcessor extends AbstractPacketProcessor 
 
     private final long expectedPackets;
 
-    public MultipleConsumerDisruptorProcessor(int bufferSize, String source, long expectedPackets) throws IOException {
+    public MultipleConsumerProcessor(int bufferSize, String source, long expectedPackets) throws IOException {
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new PcapReader(source, readerDisruptor);
@@ -51,7 +51,7 @@ public class MultipleConsumerDisruptorProcessor extends AbstractPacketProcessor 
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        MultipleConsumerDisruptorProcessor processor = new MultipleConsumerDisruptorProcessor(
+        MultipleConsumerProcessor processor = new MultipleConsumerProcessor(
                 1024,
                 "src/main/resources/input_thousand.pcap",
                 1000
