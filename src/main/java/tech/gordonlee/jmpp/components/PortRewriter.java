@@ -27,8 +27,8 @@ public class PortRewriter extends Component {
      * negative value (i.e. -1) to retain the original address.
      * @param inputDisruptor
      * @param outputDisruptor
-     * @param srcPort
-     * @param dstPort
+     * @param srcPort -1 if unchanged
+     * @param dstPort -1 if unchanged
      */
     public PortRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, int srcPort, int dstPort) {
         this.inputDisruptor = inputDisruptor;

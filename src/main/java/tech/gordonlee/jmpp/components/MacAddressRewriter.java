@@ -1,7 +1,7 @@
 package tech.gordonlee.jmpp.components;
 
 import com.lmax.disruptor.dsl.Disruptor;
-import io.pkts.packet.IPPacket;
+import io.pkts.packet.MACPacket;
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
 import tech.gordonlee.jmpp.utils.PacketEvent;
@@ -11,9 +11,9 @@ import java.io.IOException;
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
 /**
- * Rewrites the Layer 4 source and destination IP address.
+ *
  */
-public class IpAddressRewriter extends Component {
+public class MacAddressRewriter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> outputDisruptor;
@@ -28,7 +28,7 @@ public class IpAddressRewriter extends Component {
      * @param srcAddr null if unchanged
      * @param dstAddr null if unchanged
      */
-    public IpAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
+    public MacAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;
         inputDisruptor.handleEventsWith(this);
@@ -50,15 +50,14 @@ public class IpAddressRewriter extends Component {
 
     @Override
     public void process(Packet packet) throws IOException {
-        Protocol layerThreeProtocol = packet.hasProtocol(Protocol.IPv4) ? Protocol.IPv4 : Protocol.IPv6;
-        IPPacket layerThreePacket = (IPPacket) packet.getPacket(layerThreeProtocol);
+        MACPacket macPacket = (MACPacket) packet.getPacket(Protocol.ETHERNET_II);
 
-        // Set addresses if they have been defined
         if (srcAddr != null) {
-            layerThreePacket.setSourceIP(srcAddr);
+            macPacket.setSourceMacAddress(srcAddr);
         }
+
         if (dstAddr != null) {
-            layerThreePacket.setDestinationIP(dstAddr);
+            macPacket.setDestinationMacAddress(dstAddr);
         }
 
         outputDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
