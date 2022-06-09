@@ -14,4 +14,11 @@ public class TestUtils {
 
     public static final int BUFFER_SIZE = 1024;
 
+    public static final File HUNDRED_PACKET_PCAP = new File("src/test/resources/inputs/input_100.pcap");
+    public static final File HUNDRED_PACKET_PCAP_COPY_1 = new File("src/test/resources/inputs/copies/input_1_100.pcap");
+    public static final File HUNDRED_PACKET_PCAP_COPY_2 = new File("src/test/resources/inputs/copies/input_2_100.pcap");
+    public static final File HUNDRED_PACKET_PCAP_COPY_3 = new File("src/test/resources/inputs/copies/input_3_100.pcap");
+    public static final int HUNDRED_PACKET_PCAP_COUNT = 100;
+
+
 }
