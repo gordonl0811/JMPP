@@ -6,8 +6,8 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.components.Dropper;
-import tech.gordonlee.jmpp.components.Filter;
-import tech.gordonlee.jmpp.components.LayerFourPortRewriter;
+import tech.gordonlee.jmpp.components.TcpUdpFilter;
+import tech.gordonlee.jmpp.components.PortRewriter;
 import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.readers.Reader;
 import tech.gordonlee.jmpp.utils.PacketEvent;
@@ -18,31 +18,23 @@ import java.util.List;
 public class FilterRewriteJoinDisruptorProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
-    private final Filter filter;
-    private final LayerFourPortRewriter tcpRewriter;
-    private final LayerFourPortRewriter udpRewriter;
+    private final TcpUdpFilter filter;
+    private final PortRewriter tcpRewriter;
+    private final PortRewriter udpRewriter;
     private final Dropper dropper;
 
     private final long expectedPackets;
 
-    public FilterRewriteJoinDisruptorProcessor(
-            int bufferSize,
-            String source,
-            int tcpSrcPort,
-            int tcpDestPort,
-            int udpSrcPort,
-            int udpDestPort,
-            long expectedPackets
-    ) throws IOException {
+    public FilterRewriteJoinDisruptorProcessor(int bufferSize, String source, int tcpSrcPort, int tcpDstPort, int udpSrcPort, int udpDstPort, long expectedPackets) throws IOException {
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new YieldingWaitStrategy());
 
         this.reader = new PcapReader(source, readerDisruptor);
-        this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
-        this.tcpRewriter = new LayerFourPortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDestPort);
-        this.udpRewriter = new LayerFourPortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDestPort);
+        this.filter = new TcpUdpFilter(readerDisruptor, tcpDisruptor, udpDisruptor);
+        this.tcpRewriter = new PortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDstPort);
+        this.udpRewriter = new PortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDstPort);
         this.dropper = new Dropper(rewriterDisruptor);
 
         this.expectedPackets = expectedPackets;

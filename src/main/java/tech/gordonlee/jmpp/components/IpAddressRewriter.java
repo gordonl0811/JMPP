@@ -10,18 +10,28 @@ import java.io.IOException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class LayerThreeAddressRewriter extends Component {
+/**
+ * Rewrites the Layer 4 source and destination IP address.
+ */
+public class IpAddressRewriter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> outputDisruptor;
     private final String srcAddr;
     private final String dstAddr;
 
-    public LayerThreeAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
+    /**
+     * Default constructor. Set srcAddr and/or dstAddr to
+     * a null String to retain the original address.
+     * @param inputDisruptor
+     * @param outputDisruptor
+     * @param srcAddr
+     * @param dstAddr
+     */
+    public IpAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;
         inputDisruptor.handleEventsWith(this);
-        // Set srcPort/destPort to a negative value (i.e. -1) to retain their values
         this.srcAddr = srcAddr;
         this.dstAddr = dstAddr;
     }

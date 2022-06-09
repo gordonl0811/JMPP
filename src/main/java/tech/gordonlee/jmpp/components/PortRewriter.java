@@ -10,20 +10,33 @@ import java.io.IOException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class LayerFourPortRewriter extends Component {
+/**
+ * Rewrites the Layer 3 source and destination ports.
+ * The class does not handle invalid ports; it is the
+ * user's responsibility to set the ports correctly.
+ */
+public class PortRewriter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> outputDisruptor;
     private final int srcPort;
-    private final int destPort;
+    private final int dstPort;
 
-    public LayerFourPortRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, int srcPort, int destPort) {
+    /**
+     * Default constructor. Set srcPort and/or dstPort to a
+     * negative value (i.e. -1) to retain the original address.
+     * @param inputDisruptor
+     * @param outputDisruptor
+     * @param srcPort
+     * @param dstPort
+     */
+    public PortRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, int srcPort, int dstPort) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;
         inputDisruptor.handleEventsWith(this);
         // Set srcPort/destPort to a negative value (i.e. -1) to retain their values
         this.srcPort = srcPort;
-        this.destPort = destPort;
+        this.dstPort = dstPort;
     }
 
     @Override
@@ -47,8 +60,8 @@ public class LayerFourPortRewriter extends Component {
         if (srcPort >= 0) {
             layerFourPacket.setSourcePort(srcPort);
         }
-        if (destPort >= 0) {
-            layerFourPacket.setDestinationPort(destPort);
+        if (dstPort >= 0) {
+            layerFourPacket.setDestinationPort(dstPort);
         }
 
         outputDisruptor.publishEvent((event, sequence) -> event.setValue(packet));

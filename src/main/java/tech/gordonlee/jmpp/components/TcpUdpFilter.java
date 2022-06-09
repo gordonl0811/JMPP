@@ -9,13 +9,18 @@ import java.io.IOException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class Filter extends Component {
+/**
+ * Splits a stream of Packets into TCP and UDP
+ * packets, sending them to their respective
+ * buffers (defined by the constructor).
+ */
+public class TcpUdpFilter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> tcpDisruptor;
     private final Disruptor<PacketEvent> udpDisruptor;
 
-    public Filter(
+    public TcpUdpFilter(
             Disruptor<PacketEvent> inputDisruptor,
             Disruptor<PacketEvent> tcpDisruptor,
             Disruptor<PacketEvent> udpDisruptor) {

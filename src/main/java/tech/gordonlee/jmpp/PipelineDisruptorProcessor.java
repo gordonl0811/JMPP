@@ -6,7 +6,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.components.Dropper;
-import tech.gordonlee.jmpp.components.LayerFourPortRewriter;
+import tech.gordonlee.jmpp.components.PortRewriter;
 import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.readers.Reader;
 import tech.gordonlee.jmpp.utils.PacketEvent;
@@ -17,18 +17,18 @@ import java.util.List;
 public class PipelineDisruptorProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
-    private final LayerFourPortRewriter rewriter;
+    private final PortRewriter rewriter;
     private final Dropper dropper;
 
     private final long expectedPackets;
 
-    public PipelineDisruptorProcessor(int bufferSize, String source, int srcPort, int destPort, long expectedPackets) throws IOException {
+    public PipelineDisruptorProcessor(int bufferSize, String source, int srcPort, int dstPort, long expectedPackets) throws IOException {
 
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new PcapReader(source, readerDisruptor);
-        this.rewriter = new LayerFourPortRewriter(readerDisruptor, rewriterDisruptor, srcPort, destPort);
+        this.rewriter = new PortRewriter(readerDisruptor, rewriterDisruptor, srcPort, dstPort);
         this.dropper = new Dropper(rewriterDisruptor);
 
         this.expectedPackets = expectedPackets;

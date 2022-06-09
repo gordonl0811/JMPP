@@ -6,6 +6,11 @@ import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
+/**
+ * Droppers consume Packets without performing any
+ * operations on them. These are useful for discarding
+ * packets that are not needed by the processor.
+ */
 public class Dropper extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;

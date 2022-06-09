@@ -12,17 +12,23 @@ import java.io.IOException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
+/**
+ * Writers copy packets to Pcap files.
+ * The frequent I/O generates significant overhead for the Processor,
+ * so this component is most useful when being used to verify the
+ * functional correctness of a processor.
+ */
 public class Writer extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final PcapOutputStream output;
 
-    public Writer(Disruptor<PacketEvent> inputDisruptor, String dest) throws FileNotFoundException {
+    public Writer(Disruptor<PacketEvent> inputDisruptor, String dst) throws FileNotFoundException {
         this.inputDisruptor = inputDisruptor;
         inputDisruptor.handleEventsWith(this);
         this.output = PcapOutputStream.create(
                 PcapGlobalHeader.createDefaultHeader(),
-                new FileOutputStream(dest)
+                new FileOutputStream(dst)
         );
     }
 
