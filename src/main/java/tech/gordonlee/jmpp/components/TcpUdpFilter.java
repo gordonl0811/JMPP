@@ -32,7 +32,6 @@ public class TcpUdpFilter extends Component {
 
     @Override
     public void initialize() {
-
         startDisruptor(inputDisruptor);
         startDisruptor(tcpDisruptor);
         startDisruptor(udpDisruptor);
