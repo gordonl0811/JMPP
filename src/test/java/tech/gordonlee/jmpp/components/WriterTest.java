@@ -24,7 +24,7 @@ public class WriterTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test(timeout = 3000)
-    public void WriterCopiesSinglePacketExactly() throws IOException, InterruptedException {
+    public void testWriterCopiesSinglePacketExactly() throws IOException, InterruptedException {
         File outputPcap = folder.newFile("output.pcap");
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, SINGLE_PACKET_PCAP_COUNT, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
         Reader reader = new PcapReader(SINGLE_PACKET_PCAP.getAbsolutePath(), readerDisruptor);
@@ -47,7 +47,7 @@ public class WriterTest {
     }
 
     @Test(timeout = 3000)
-    public void WriterHandlesMultiplePackets() throws IOException, InterruptedException {
+    public void testWriterHandlesMultiplePackets() throws IOException, InterruptedException {
         File outputPcap = folder.newFile("output.pcap");
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, MULTIPLE_PACKET_PCAP_COUNT, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
         Reader reader = new PcapReader(MULTIPLE_PACKET_PCAP.getAbsolutePath(), readerDisruptor);

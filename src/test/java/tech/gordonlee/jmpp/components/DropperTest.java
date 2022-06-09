@@ -12,15 +12,14 @@ import tech.gordonlee.jmpp.utils.PacketEvent;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static tech.gordonlee.jmpp.components.utils.TestUtils.MULTIPLE_PACKET_PCAP;
-import static tech.gordonlee.jmpp.components.utils.TestUtils.MULTIPLE_PACKET_PCAP_COUNT;
+import static tech.gordonlee.jmpp.components.utils.TestUtils.*;
 
 public class DropperTest {
 
     @Test(timeout = 3000)
-    public void DropperCountsPacketsCorrectly() throws IOException, InterruptedException {
+    public void testDropperCountsPacketsCorrectly() throws IOException, InterruptedException {
 
-        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, 1, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
+        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, SINGLE_PACKET_PCAP_COUNT, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
         Reader reader = new PcapReader(MULTIPLE_PACKET_PCAP.getAbsolutePath(), readerDisruptor);
         Dropper dropper = new Dropper(readerDisruptor);
 
