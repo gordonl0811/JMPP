@@ -1,14 +1,14 @@
 package tech.gordonlee.jmpp;
 
 import tech.gordonlee.jmpp.components.Component;
-import tech.gordonlee.jmpp.readers.PcapReader;
+import tech.gordonlee.jmpp.readers.Reader;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractPacketProcessor implements PacketProcessor {
 
-    private List<PcapReader> readers;
+    private List<Reader> readers;
     private List<Component> components;
 
     /**
@@ -16,7 +16,7 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
      * declaring the sources used within the Processor.
      * @return a list of Readers (recommend using List.of())
      */
-    protected abstract List<PcapReader> setReaders();
+    protected abstract List<Reader> setReaders();
 
     /**
      * Implementing classes have the responsibility of
@@ -34,7 +34,7 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
     public final void initialize() {
         readers = setReaders();
         components = setComponents();
-        for (PcapReader reader : readers) {
+        for (Reader reader : readers) {
             reader.initialize();
         }
         for (Component component : components) {
@@ -65,7 +65,7 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
      */
     @Override
     public final void shutdown() {
-        for (PcapReader reader : readers) {
+        for (Reader reader : readers) {
             reader.shutdown();
         }
         for (Component component : components) {
@@ -77,7 +77,7 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
      * Signal to the readers to begin producing packets.
      */
     private void releasePackets() {
-        for (PcapReader reader : readers) {
+        for (Reader reader : readers) {
             reader.start();
         }
     }

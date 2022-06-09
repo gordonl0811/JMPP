@@ -7,6 +7,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.components.Dropper;
 import tech.gordonlee.jmpp.readers.PcapReader;
+import tech.gordonlee.jmpp.readers.Reader;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class MultipleConsumerDisruptorProcessor extends AbstractPacketProcessor 
     }
 
     @Override
-    protected List<PcapReader> setReaders() {
+    protected List<Reader> setReaders() {
         return List.of(reader);
     }
 

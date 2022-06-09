@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
-public class PcapReader {
+public class PcapReader implements Reader {
 
     private final Pcap source;
     private final Disruptor<PacketEvent> outputDisruptor;
@@ -19,14 +19,12 @@ public class PcapReader {
         this.outputDisruptor = outputDisruptor;
     }
 
+    @Override
     public void initialize() {
         startDisruptor(outputDisruptor);
     }
 
-    public void shutdown() {
-        outputDisruptor.shutdown();
-    }
-
+    @Override
     public void start() {
 
         try {
@@ -41,6 +39,11 @@ public class PcapReader {
 
         source.close();
 
+    }
+
+    @Override
+    public void shutdown() {
+        outputDisruptor.shutdown();
     }
 
 }
