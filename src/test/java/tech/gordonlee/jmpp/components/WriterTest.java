@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class WriterTest {
 
     private final File singlePacketPcap = new File("src/test/resources/inputs/input_1.pcap");
+    private final File multiplePacketPcap = new File("src/test/resources/inputs/input_10.pcap");
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
@@ -43,5 +44,27 @@ public class WriterTest {
 
         assert(FileUtils.contentEquals(singlePacketPcap, outputPcap));
 
+    }
+
+    @Test
+    public void WriterHandlesMultiplePackets() throws IOException, InterruptedException {
+        File outputPcap = folder.newFile("output.pcap");
+        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, 10, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
+        Reader reader = new PcapReader(multiplePacketPcap.getAbsolutePath(), readerDisruptor);
+        Writer writer = new Writer(readerDisruptor, outputPcap.getAbsolutePath());
+
+        reader.initialize();
+        writer.initialize();
+
+        reader.start();
+
+        while (writer.getPacketCount() != 10) {
+            TimeUnit.MILLISECONDS.sleep(1);
+        }
+
+        reader.shutdown();
+        writer.shutdown();
+
+        assert(FileUtils.contentEquals(multiplePacketPcap, outputPcap));
     }
 }
