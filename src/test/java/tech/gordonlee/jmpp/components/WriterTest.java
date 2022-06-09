@@ -26,7 +26,7 @@ public class WriterTest {
     @Test(timeout = 3000)
     public void testWriterCopiesSinglePacketExactly() throws IOException, InterruptedException {
         File outputPcap = folder.newFile("output.pcap");
-        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, SINGLE_PACKET_PCAP_COUNT, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
+        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, BUFFER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
         Reader reader = new PcapReader(SINGLE_PACKET_PCAP.getAbsolutePath(), readerDisruptor);
         Writer writer = new Writer(readerDisruptor, outputPcap.getAbsolutePath());
 
@@ -42,7 +42,7 @@ public class WriterTest {
         reader.shutdown();
         writer.shutdown();
 
-        assert(FileUtils.contentEquals(SINGLE_PACKET_PCAP, outputPcap));
+        assert (FileUtils.contentEquals(SINGLE_PACKET_PCAP, outputPcap));
 
     }
 
@@ -65,6 +65,6 @@ public class WriterTest {
         reader.shutdown();
         writer.shutdown();
 
-        assert(FileUtils.contentEquals(MULTIPLE_PACKET_PCAP, outputPcap));
+        assert (FileUtils.contentEquals(MULTIPLE_PACKET_PCAP, outputPcap));
     }
 }

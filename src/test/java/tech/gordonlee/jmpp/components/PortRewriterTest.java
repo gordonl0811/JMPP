@@ -5,7 +5,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import io.pkts.Pcap;
-import io.pkts.packet.IPPacket;
+import io.pkts.packet.TransportPacket;
 import io.pkts.protocol.Protocol;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,10 +20,10 @@ import java.util.concurrent.TimeUnit;
 
 import static tech.gordonlee.jmpp.components.utils.TestUtils.*;
 
-public class IpAddressRewriterTest {
+public class PortRewriterTest {
 
-    private final String testSrcAddr = "100.100.1.1";
-    private final String testDstAddr = "200.200.2.2";
+    private final int testSrcPort = 99;
+    private final int testDstPort = 99;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -34,10 +34,10 @@ public class IpAddressRewriterTest {
         File outputPcap = folder.newFile("output.pcap");
 
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, BUFFER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
-        Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, MULTIPLE_PACKET_PCAP_COUNT, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
+        Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, BUFFER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
 
         Reader reader = new PcapReader(MULTIPLE_PACKET_PCAP.getAbsolutePath(), readerDisruptor);
-        IpAddressRewriter rewriter = new IpAddressRewriter(readerDisruptor, rewriterDisruptor, testSrcAddr, testDstAddr);
+        PortRewriter rewriter = new PortRewriter(readerDisruptor, rewriterDisruptor, testSrcPort, testDstPort);
         Writer writer = new Writer(rewriterDisruptor, outputPcap.getAbsolutePath());
 
         reader.initialize();
@@ -58,10 +58,10 @@ public class IpAddressRewriterTest {
         // Check that the packet addresses match the changed output
         Pcap generatedPcap = Pcap.openStream(outputPcap);
         generatedPcap.loop(packet -> {
-            Protocol layerThreeProtocol = packet.hasProtocol(Protocol.IPv4) ? Protocol.IPv4 : Protocol.IPv6;
-            IPPacket layerThreePacket = (IPPacket) packet.getPacket(layerThreeProtocol);
-            assert layerThreePacket.getSourceIP().equals(testSrcAddr);
-            assert layerThreePacket.getDestinationIP().equals(testDstAddr);
+            Protocol layerFourProtocol = packet.hasProtocol(Protocol.TCP) ? Protocol.TCP : Protocol.UDP;
+            TransportPacket layerFourPacket = (TransportPacket) packet.getPacket(layerFourProtocol);
+            assert layerFourPacket.getSourcePort() == testSrcPort;
+            assert layerFourPacket.getDestinationPort() == testDstPort;
             return true;
         });
 
