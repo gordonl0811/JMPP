@@ -13,7 +13,7 @@ public interface PacketProcessor {
     /**
      * Start the processor, allowing the readers to produce packets from their sources.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException can be thrown when waiting for termination
      */
     void start() throws InterruptedException;
 

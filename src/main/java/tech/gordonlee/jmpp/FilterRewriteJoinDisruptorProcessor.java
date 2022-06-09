@@ -8,7 +8,7 @@ import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.components.Dropper;
 import tech.gordonlee.jmpp.components.Filter;
 import tech.gordonlee.jmpp.components.LayerFourPortRewriter;
-import tech.gordonlee.jmpp.sources.PcapReader;
+import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;

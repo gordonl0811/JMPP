@@ -1,7 +1,7 @@
 package tech.gordonlee.jmpp;
 
 import tech.gordonlee.jmpp.components.Component;
-import tech.gordonlee.jmpp.sources.PcapReader;
+import tech.gordonlee.jmpp.readers.PcapReader;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -11,11 +11,25 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
     private List<PcapReader> readers;
     private List<Component> components;
 
+    /**
+     * Implementing classes have the responsibility of
+     * declaring the sources used within the Processor.
+     * @return a list of Readers (recommend using List.of())
+     */
     protected abstract List<PcapReader> setReaders();
 
+    /**
+     * Implementing classes have the responsibility of
+     * declaring the components used within the Processor.
+     * @return a list of Components (recommend using List.of())
+     */
     protected abstract List<Component> setComponents();
 
 
+    /**
+     * Initialises the Readers and Components that the
+     * Processor uses, dependent on their implementations.
+     */
     @Override
     public final void initialize() {
         readers = setReaders();
@@ -28,6 +42,11 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
         }
     }
 
+    /**
+     * Releases the packets from the Readers,
+     * spinning until it is told to terminate.
+     * @throws InterruptedException from sleep() when spinning
+     */
     @Override
     public void start() throws InterruptedException {
 
@@ -40,6 +59,10 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
 
     }
 
+    /**
+     * Shuts down each reader/component
+     * specific to their implementation.
+     */
     @Override
     public final void shutdown() {
         for (PcapReader reader : readers) {
@@ -60,9 +83,9 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
     }
 
     /**
-     * The start() function ends when a condition is met. This requirement will change for each Processor, so
+     * The start() function ends when a condition is met. This
+     * requirement will change for each Processor, so
      * implementing classes will need to define this condition.
-     *
      * @return true when a condition is met
      */
     protected abstract boolean shouldTerminate();

@@ -6,7 +6,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.components.Dropper;
-import tech.gordonlee.jmpp.sources.PcapReader;
+import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;

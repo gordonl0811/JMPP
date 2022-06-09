@@ -1,4 +1,4 @@
-package tech.gordonlee.jmpp.sources;
+package tech.gordonlee.jmpp.readers;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.Pcap;
