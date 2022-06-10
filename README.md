@@ -101,18 +101,36 @@ These need to be called in turn; omitting the `shutdown()` call can result in un
 
 The separation of these processes allows for easier benchmarking, as demonstrated in later sections of the documentation.
 
-#### Building Processors
+#### Building Processor Classes
 
+For the sake of brevity, "components" refers to `Readers`, `Components` and `Outputters`.
 
+The `Processor` attributes will be the components in the processor design. The class constructor signature would typically include the following:
+
+- The size of the Disruptor buffers, unless the user wishes to keep these fixed
+- The source of the packets, which could be a Pcap file or a socket
+- The number of packets that the Processor expects to handle, used within the termination condition (described later in the section)
+
+The constructors will also create `Disruptors` and wire components together using these.
+
+Note: ensure that the Disruptor is using the `ProducerType.SINGLE` parameter if only a single component is outputting to a Disruptor. This will result in significant improvements over its `ProducerType.MULTI` counterpart, but misusing this will result in race conditions and lose functional correctness.
+
+`Processor` classes `extend` the `AbstractPacketProcessor` class, which requires implementations of the following methods:
+
+1. `setReaders()`: Return a list of the `Readers` being used. This can be as simple as using the `List.of(component1, component2, ...)` method.
+2. `setComponents()`: Return a list of the `Components` and `Outputters` being used in a similar fashion to `setReaders()`.
+3. `shouldTerminate()`: the condition for a processor to finish its `start()` call. A common implementation is to check whether a certain number of packets have been processed using `getPacketCount()` on `Outputter` components. Always return `false` to keep the processor running indefinitely.
+
+Processors can then be used by instantiating an object, then calling the relevant lifecycle methods.
+
+[MultipleConsumerProcessor](src/main/java/tech/gordonlee/jmpp/MultipleConsumerProcessor.java) is a very simple implementation with a `PcapReader` and three `Droppers`.
 
 #### Example: Redirecting TCP and UDP packets
 
-
+TODO
 
 ## Benchmarks
 
 TODO
 
 ## Future Work
-
-The bottleneck for 
