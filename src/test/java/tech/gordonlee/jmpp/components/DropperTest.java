@@ -5,6 +5,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.junit.Test;
+import tech.gordonlee.jmpp.components.outputters.Dropper;
 import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.readers.Reader;
 import tech.gordonlee.jmpp.utils.PacketEvent;

@@ -10,6 +10,8 @@ import io.pkts.protocol.Protocol;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import tech.gordonlee.jmpp.components.outputters.Writer;
+import tech.gordonlee.jmpp.components.rewriters.PortRewriter;
 import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.readers.Reader;
 import tech.gordonlee.jmpp.utils.PacketEvent;

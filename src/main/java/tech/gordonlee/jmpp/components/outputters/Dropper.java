@@ -1,7 +1,8 @@
-package tech.gordonlee.jmpp.components;
+package tech.gordonlee.jmpp.components.outputters;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.Packet;
+import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;

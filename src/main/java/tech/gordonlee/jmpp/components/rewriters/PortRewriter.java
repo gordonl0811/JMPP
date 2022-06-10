@@ -1,9 +1,10 @@
-package tech.gordonlee.jmpp.components;
+package tech.gordonlee.jmpp.components.rewriters;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.Packet;
 import io.pkts.packet.TransportPacket;
 import io.pkts.protocol.Protocol;
+import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;

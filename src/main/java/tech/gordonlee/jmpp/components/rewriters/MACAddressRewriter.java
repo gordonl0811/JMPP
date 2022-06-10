@@ -1,9 +1,10 @@
-package tech.gordonlee.jmpp.components;
+package tech.gordonlee.jmpp.components.rewriters;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.MACPacket;
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
+import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 /**
  *
  */
-public class MacAddressRewriter extends Component {
+public class MACAddressRewriter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> outputDisruptor;
@@ -28,7 +29,7 @@ public class MacAddressRewriter extends Component {
      * @param srcAddr null if unchanged
      * @param dstAddr null if unchanged
      */
-    public MacAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
+    public MACAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;
         inputDisruptor.handleEventsWith(this);

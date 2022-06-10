@@ -10,6 +10,8 @@ import io.pkts.protocol.Protocol;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import tech.gordonlee.jmpp.components.outputters.Writer;
+import tech.gordonlee.jmpp.components.rewriters.IPAddressRewriter;
 import tech.gordonlee.jmpp.readers.PcapReader;
 import tech.gordonlee.jmpp.readers.Reader;
 import tech.gordonlee.jmpp.utils.PacketEvent;
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static tech.gordonlee.jmpp.components.utils.TestUtils.*;
 
-public class IpAddressRewriterTest {
+public class IPAddressRewriterTest {
 
     private final String testSrcAddr = "100.100.1.1";
     private final String testDstAddr = "200.200.2.2";
@@ -37,7 +39,7 @@ public class IpAddressRewriterTest {
         Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, BUFFER_SIZE, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new BusySpinWaitStrategy());
 
         Reader reader = new PcapReader(MULTIPLE_PACKET_PCAP.getAbsolutePath(), readerDisruptor);
-        IpAddressRewriter rewriter = new IpAddressRewriter(readerDisruptor, rewriterDisruptor, testSrcAddr, testDstAddr);
+        IPAddressRewriter rewriter = new IPAddressRewriter(readerDisruptor, rewriterDisruptor, testSrcAddr, testDstAddr);
         Writer writer = new Writer(rewriterDisruptor, outputPcap.getAbsolutePath());
 
         reader.initialize();

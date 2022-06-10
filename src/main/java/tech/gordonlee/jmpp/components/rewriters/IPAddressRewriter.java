@@ -1,10 +1,11 @@
-package tech.gordonlee.jmpp.components;
+package tech.gordonlee.jmpp.components.rewriters;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.IPPacket;
 import io.pkts.packet.IPv4Packet;
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
+import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.utils.PacketEvent;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 /**
  * Rewrites the Layer 4 source and destination IP address.
  */
-public class IpAddressRewriter extends Component {
+public class IPAddressRewriter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> outputDisruptor;
@@ -29,7 +30,7 @@ public class IpAddressRewriter extends Component {
      * @param srcAddr null if unchanged
      * @param dstAddr null if unchanged
      */
-    public IpAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
+    public IPAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;
         inputDisruptor.handleEventsWith(this);
