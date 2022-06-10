@@ -123,11 +123,55 @@ Note: ensure that the Disruptor is using the `ProducerType.SINGLE` parameter if 
 
 Processors can then be used by instantiating an object, then calling the relevant lifecycle methods.
 
-[MultipleConsumerProcessor](src/main/java/tech/gordonlee/jmpp/MultipleConsumerProcessor.java) is a very simple implementation with a `PcapReader` and three `Droppers`.
+[MultipleConsumerProcessor](src/main/java/tech/gordonlee/jmpp/examples/MultipleConsumerProcessor.java) is a very simple implementation with a `PcapReader` and three `Droppers`.
 
 #### Example: Redirecting TCP and UDP packets
 
-TODO
+A slightly more complex (and perhaps realistic) example can be used to showcase the flexibility of the library.
+
+Considering the following requirements of a processor:
+- A stream of packets containing a mixture of TCP and UDP packets are received, with destinations of `127.0.0.1:80/53` respectively.
+- TCP packets are to be redirected to `192.168.0.11:80`
+- UDP packets are to be redirected to `192.168.0.22:53`
+
+The following diagram shows the architecture of a processor that can carry this out:
+
+![](images/LayerFourReroutingProcessor.png)
+
+Writers are used to check the functional correctness of the processor; in a more realistic scenario, these packets will be sent to their corresponding destinations.
+
+The components are wired together using the process described in [the section above](#building-processor-classes), and can the resulting class found in the [LayerFourReroutingProcessor class](src/main/java/tech/gordonlee/jmpp/examples/LayerFourReroutingProcessor.java) in the `examples` folder.
+
+A simple `public static void main` can then be created:
+
+```
+public static void main(String[] args) throws IOException, InterruptedException {
+
+    // Instantiate the Processor
+    PacketProcessor processor = new LayerFourReroutingProcessor(
+            1024,
+            "src/main/resources/inputs/input_10.pcap",
+            "src/main/resources/outputs/example.pcap",
+            10
+    );
+    processor.initialize();
+
+    // Process the packets
+    processor.start();
+    processor.shutdown();
+
+}
+```
+
+Notice that the processor expects 10 packets, and will terminate when the Writer processes them all.
+
+WireShark can be used to decode the input Pcap (generated with Scapy), [`input_10.pcap`](src/main/resources/inputs/input_10.pcap), which contains the following packets:
+
+![](images/ExampleInputPackets.png)
+
+After running the processor, the output Pcap generated shows how the packets have been modified. The packets are out of order, but can be mapped based on the "time" column:
+
+![](images/ExampleOutputPackets.png)
 
 ## Benchmarks
 

@@ -38,17 +38,17 @@ public class LayerFourReroutingProcessor extends AbstractPacketProcessor {
     public LayerFourReroutingProcessor(int bufferSize, String srcPcap, String dstPcap, long expectedPackets) throws IOException {
 
         Disruptor<PacketEvent> readerOutputDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        Disruptor<PacketEvent> filteredTcpPackets = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        Disruptor<PacketEvent> filteredUdpPackets = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+        Disruptor<PacketEvent> tcpPacketsDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+        Disruptor<PacketEvent> udpPacketsDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> writerInputDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new PcapReader(srcPcap, readerOutputDisruptor);
 
-        this.tcpFilter = new TCPFilter(readerOutputDisruptor, filteredTcpPackets);
-        this.tcpAddressRewriter = new IPAddressRewriter(filteredTcpPackets, writerInputDisruptor, null, TCP_PACKET_DESTINATION);
+        this.tcpFilter = new TCPFilter(readerOutputDisruptor, tcpPacketsDisruptor);
+        this.tcpAddressRewriter = new IPAddressRewriter(tcpPacketsDisruptor, writerInputDisruptor, null, TCP_PACKET_DESTINATION);
 
-        this.udpFilter = new UDPFilter(readerOutputDisruptor, filteredUdpPackets);
-        this.udpAddressRewriter = new IPAddressRewriter(filteredUdpPackets, writerInputDisruptor, null, UDP_PACKET_DESTINATION);
+        this.udpFilter = new UDPFilter(readerOutputDisruptor, udpPacketsDisruptor);
+        this.udpAddressRewriter = new IPAddressRewriter(udpPacketsDisruptor, writerInputDisruptor, null, UDP_PACKET_DESTINATION);
 
         this.writer = new Writer(writerInputDisruptor, dstPcap);
 
@@ -76,7 +76,7 @@ public class LayerFourReroutingProcessor extends AbstractPacketProcessor {
         PacketProcessor processor = new LayerFourReroutingProcessor(
                 1024,
                 "src/main/resources/inputs/input_10.pcap",
-                "src/main/resources/outputs/example.pcap",
+                "src/main/resources/outputs/output.pcap",
                 10
         );
         processor.initialize();
