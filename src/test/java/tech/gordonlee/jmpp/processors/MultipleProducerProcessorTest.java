@@ -1,7 +1,7 @@
 package tech.gordonlee.jmpp.processors;
 
 import org.junit.Test;
-import tech.gordonlee.jmpp.MultipleProducerProcessor;
+import tech.gordonlee.jmpp.examples.MultipleProducerProcessor;
 import tech.gordonlee.jmpp.PacketProcessor;
 
 import java.io.IOException;

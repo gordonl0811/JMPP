@@ -1,9 +1,10 @@
-package tech.gordonlee.jmpp;
+package tech.gordonlee.jmpp.examples;
 
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+import tech.gordonlee.jmpp.AbstractPacketProcessor;
 import tech.gordonlee.jmpp.components.Component;
 import tech.gordonlee.jmpp.components.outputters.Dropper;
 import tech.gordonlee.jmpp.readers.PcapReader;
@@ -50,15 +51,4 @@ public class MultipleConsumerProcessor extends AbstractPacketProcessor {
                 consumerThree.getPacketCount() == expectedPackets;
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
-        MultipleConsumerProcessor processor = new MultipleConsumerProcessor(
-                1024,
-                "src/main/resources/input_thousand.pcap",
-                1000
-        );
-
-        processor.initialize();
-        processor.start();
-        processor.shutdown();
-    }
 }
