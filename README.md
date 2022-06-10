@@ -79,9 +79,35 @@ LMAX have built an order matching engine, real-time risk management, and a highl
 
 This library uses Disruptors to pass `Packets` between components, simulating a processing pipeline that can fork and rejoin streams of Packets based on user-defined logic.
 
-### Getting Started: Building Processors
+### Getting Started
+
+For most user implementations, using the `PacketProcessor` interface and `AbstractPacketProcessor` will save a lot of development time and consideration. This section outlines how to build a Processor around this interface/class.
+
+#### Requirements
+
+- Basic understanding of Disruptors (documentation can be found [here](https://lmax-exchange.github.io/disruptor/))
 
 TODO
+
+#### The Processor Lifecycle
+
+Processors have three distinct stages wrapped into three methods specified by the `PacketProcessor` interface.
+
+1. `initialize()`: Disruptors are started, ready to receive packets
+2. `start()`: `Readers` start producing packets until a certain condition is met (or indefinitely)
+3. `shutdown()`: Gracefully shuts down the Disruptors associated with the Processor
+
+These need to be called in turn; omitting the `shutdown()` call can result in undefined behaviour.
+
+The separation of these processes allows for easier benchmarking, as demonstrated in later sections of the documentation.
+
+#### Building Processors
+
+
+
+#### Example: Redirecting TCP and UDP packets
+
+
 
 ## Benchmarks
 
