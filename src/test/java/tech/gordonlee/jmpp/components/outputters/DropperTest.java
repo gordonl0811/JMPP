@@ -1,4 +1,4 @@
-package tech.gordonlee.jmpp.components;
+package tech.gordonlee.jmpp.components.outputters;
 
 import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
