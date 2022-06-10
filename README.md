@@ -169,7 +169,7 @@ Notice that the processor expects 10 packets, and will terminate when the Writer
 WireShark can be used to decode the input Pcap (generated with Scapy), [`input_10.pcap`](src/main/resources/inputs/input_10.pcap), which contains the following packets:
 
 ![](images/ExampleInputPackets.png)
-
+ 
 After running the processor, the output Pcap generated shows how the packets have been modified. The packets are out of order, but can be mapped based on the "time" column:
 
 ![](images/ExampleOutputPackets.png)
