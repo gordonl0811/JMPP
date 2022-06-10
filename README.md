@@ -47,14 +47,15 @@ The tables below outline the components available and their functionalities.
 
 #### Filters
 
-| Class            | Description                                                    |
-|------------------|----------------------------------------------------------------|
-| IPv4Filter       | Outputs packets with an IPv4 (Layer 3) header                  |
-| IPv6Filter       | Outputs packets with an IPv6 (Layer 3) header                  |
-| TCPFilter        | Outputs packets with a TCP (Layer 4) header                    |
-| UDPFilter        | Outputs packets with a UDP (Layer 4) header                    |
-| MACAddressFilter | Outputs packets that have a MAC address within the given range |
-| IPAddressFilter  | Outputs packets that have an IP address within the given range |
+| Class                 | Description                                                      |
+|-----------------------|------------------------------------------------------------------|
+| IPv4Filter            | Outputs packets with an IPv4 (Layer 3) header                    |
+| IPv6Filter            | Outputs packets with an IPv6 (Layer 3) header                    |
+| TCPFilter             | Outputs packets with a TCP (Layer 4) header                      |
+| UDPFilter             | Outputs packets with a UDP (Layer 4) header                      |
+| MACAddressFilter      | Outputs packets that have a MAC address within the given range   |
+| IPv4DestinationFilter | Outputs packets that have an IPv4 address within the given range |
+| IPv6DestinationFilter | Outputs packets that have an IPv6 address within the given range |
 
 #### Rewriters
 
@@ -125,6 +126,8 @@ Note: ensure that the Disruptor is using the `ProducerType.SINGLE` parameter if 
 Processors can then be used by instantiating an object, then calling the relevant lifecycle methods.
 
 [MultipleConsumerProcessor](src/main/java/tech/gordonlee/jmpp/examples/MultipleConsumerProcessor.java) is a very simple implementation with a `PcapReader` and three `Droppers`.
+
+Note: it is the user's responsibility to ensure that the architecture of the processor is designed appropriately; for instance, it would not make sense for an IPv4Filter to output to an IPv6AddressFilter.
 
 #### Example: Redirecting TCP and UDP packets
 
