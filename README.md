@@ -86,8 +86,9 @@ For most user implementations, using the `PacketProcessor` interface and `Abstra
 #### Requirements
 
 - Basic understanding of Disruptors (documentation can be found [here](https://lmax-exchange.github.io/disruptor/))
+- Java 14
+- WinPcap (Windows) or libpcap (Linux) depending on the operating system being used
 
-TODO
 
 #### The Processor Lifecycle
 
@@ -178,3 +179,5 @@ After running the processor, the output Pcap generated shows how the packets hav
 TODO
 
 ## Future Work
+
+TODO
