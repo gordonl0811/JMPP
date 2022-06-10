@@ -107,9 +107,9 @@ For the sake of brevity, "components" refers to `Readers`, `Components` and `Out
 
 The `Processor` attributes will be the components in the processor design. The class constructor signature would typically include the following:
 
-- The size of the Disruptor buffers, unless the user wishes to keep these fixed
-- The source of the packets, which could be a Pcap file or a socket
-- The number of packets that the Processor expects to handle, used within the termination condition (described later in the section)
+- The size of the Disruptor buffers, unless the user wishes to keep these fixed. This must be a power of 2.
+- The source of the packets, which could be a Pcap file or a socket.
+- The number of packets that the Processor expects to handle, used within the termination condition (described later in the section).
 
 The constructors will also create `Disruptors` and wire components together using these.
 
