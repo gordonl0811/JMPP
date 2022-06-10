@@ -27,6 +27,12 @@ JMPP is also built on the lightweight [pkts.io Java library developed by aboutsi
 
 ### Components
 
+#### Filters
+
+#### Rewriters
+
+#### Outputters
+
 ### Processors
 
 ## Benchmarks
