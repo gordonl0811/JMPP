@@ -16,6 +16,10 @@ public class Dropper extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
 
+    /**
+     * Default constructor.
+     * @param inputDisruptor Receives packets from this Disruptor
+     */
     public Dropper(Disruptor<PacketEvent> inputDisruptor) {
         this.inputDisruptor = inputDisruptor;
         inputDisruptor.handleEventsWith(this);

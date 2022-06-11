@@ -13,6 +13,9 @@ import java.net.UnknownHostException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
+/**
+ * Only forwards IPv4 packets that have addresses between the specified range (inclusive).
+ */
 public class IPv4DestinationFilter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
@@ -21,6 +24,14 @@ public class IPv4DestinationFilter extends Component {
     private final int addrLowerBound;
     private final int addrUpperBound;
 
+    /**
+     * Default constructor.
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param outputDisruptor Sends packets to this Disruptor
+     * @param addrLower Lower bound of the address range
+     * @param addrUpper Upper bound of the address range
+     * @throws UnknownHostException Invalid address given/read
+     */
     public IPv4DestinationFilter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String addrLower, String addrUpper) throws UnknownHostException {
 
         this.addrLowerBound = encodeIPv4Address(addrLower);
@@ -54,10 +65,9 @@ public class IPv4DestinationFilter extends Component {
 
     /**
      * Parse the address using the InetAddress class and convert it to an integer.
-     *
-     * @param address the IPv4 address as a string
-     * @return the address as a unique integer representation
-     * @throws UnknownHostException invalid IPv4 address
+     * @param address IPv4 address as a string
+     * @return Address as a unique integer representation
+     * @throws UnknownHostException Invalid address given/read
      */
     private int encodeIPv4Address(String address) throws UnknownHostException {
 

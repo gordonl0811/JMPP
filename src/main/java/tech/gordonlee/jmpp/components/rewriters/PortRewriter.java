@@ -12,7 +12,7 @@ import java.io.IOException;
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
 /**
- * Rewrites the Layer 3 source and destination ports.
+ * Rewrites the Layer 4 source and destination ports.
  * The class does not handle invalid ports; it is the
  * user's responsibility to set the ports correctly.
  */
@@ -24,12 +24,11 @@ public class PortRewriter extends Component {
     private final int dstPort;
 
     /**
-     * Default constructor. Set srcPort and/or dstPort to a
-     * negative value (i.e. -1) to retain the original address.
-     * @param inputDisruptor
-     * @param outputDisruptor
-     * @param srcPort -1 if unchanged
-     * @param dstPort -1 if unchanged
+     * Default constructor.
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param outputDisruptor Sends packets to this Disruptor
+     * @param srcPort the new source port, -1 if unchanged
+     * @param dstPort the new destination port, -1 if unchanged
      */
     public PortRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, int srcPort, int dstPort) {
         this.inputDisruptor = inputDisruptor;

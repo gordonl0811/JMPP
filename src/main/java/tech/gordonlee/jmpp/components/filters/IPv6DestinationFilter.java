@@ -14,6 +14,9 @@ import java.net.UnknownHostException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
+/**
+ * Only forwards IPv6 packets that have addresses between the specified range (inclusive).
+ */
 public class IPv6DestinationFilter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
@@ -22,6 +25,14 @@ public class IPv6DestinationFilter extends Component {
     private final BigInteger addrLowerBound;
     private final BigInteger addrUpperBound;
 
+    /**
+     * Default constructor.
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param outputDisruptor Sends packets to this Disruptor
+     * @param addrLower Lower bound of the address range
+     * @param addrUpper Upper bound of the address range
+     * @throws UnknownHostException Invalid address given/read
+     */
     public IPv6DestinationFilter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String addrLower, String addrUpper) throws UnknownHostException {
 
         this.addrLowerBound = encodeIPv6Address(addrLower);

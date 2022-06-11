@@ -10,11 +10,19 @@ import java.io.IOException;
 
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
+/**
+ * Only forwards packets that have IPv4 headers.
+ */
 public class IPv4Filter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> outputDisruptor;
 
+    /**
+     * Default constructor.
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param outputDisruptor Sends packets to this Disruptor
+     */
     public IPv4Filter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;

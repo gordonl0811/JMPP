@@ -12,7 +12,9 @@ import java.io.IOException;
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
 /**
- *
+ * Rewrites the Layer 2 source and destination addresses.
+ * The class does not handle invalid addresses; it is the
+ * user's responsibility to set the ports correctly.
  */
 public class MACAddressRewriter extends Component {
 
@@ -24,10 +26,10 @@ public class MACAddressRewriter extends Component {
     /**
      * Default constructor. Set srcAddr and/or dstAddr to
      * a null String to retain the original address.
-     * @param inputDisruptor
-     * @param outputDisruptor
-     * @param srcAddr null if unchanged
-     * @param dstAddr null if unchanged
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param outputDisruptor Sends packets to this Disruptor
+     * @param srcAddr the new source MAC address, null if unchanged
+     * @param dstAddr the new destination MAC address, null if unchanged
      */
     public MACAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
         this.inputDisruptor = inputDisruptor;

@@ -24,6 +24,12 @@ public class Writer extends Component {
     private final Disruptor<PacketEvent> inputDisruptor;
     private final PcapOutputStream output;
 
+    /**
+     * Default constructor.
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param dst Filename to write packets to
+     * @throws FileNotFoundException Invalid address to the pcap given
+     */
     public Writer(Disruptor<PacketEvent> inputDisruptor, String dst) throws FileNotFoundException {
         this.inputDisruptor = inputDisruptor;
         inputDisruptor.handleEventsWith(this);

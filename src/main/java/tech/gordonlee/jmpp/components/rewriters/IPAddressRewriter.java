@@ -13,7 +13,9 @@ import java.io.IOException;
 import static tech.gordonlee.jmpp.utils.Utils.startDisruptor;
 
 /**
- * Rewrites the Layer 4 source and destination IP address.
+ * Rewrites the Layer 3 source and destination addresses.
+ * The class does not handle invalid addresses; it is the
+ * user's responsibility to set the ports correctly.
  */
 public class IPAddressRewriter extends Component {
 
@@ -25,10 +27,10 @@ public class IPAddressRewriter extends Component {
     /**
      * Default constructor. Set srcAddr and/or dstAddr to
      * a null String to retain the original address.
-     * @param inputDisruptor
-     * @param outputDisruptor
-     * @param srcAddr null if unchanged
-     * @param dstAddr null if unchanged
+     * @param inputDisruptor Receives packets from this Disruptor
+     * @param outputDisruptor Sends packets to this Disruptor
+     * @param srcAddr the new source IP address, null if unchanged
+     * @param dstAddr the new destination IP address, null if unchanged
      */
     public IPAddressRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, String srcAddr, String dstAddr) {
         this.inputDisruptor = inputDisruptor;
