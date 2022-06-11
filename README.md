@@ -53,7 +53,6 @@ The tables below outline the components available and their functionalities.
 | IPv6Filter            | Outputs packets with an IPv6 (Layer 3) header                    |
 | TCPFilter             | Outputs packets with a TCP (Layer 4) header                      |
 | UDPFilter             | Outputs packets with a UDP (Layer 4) header                      |
-| MACAddressFilter      | Outputs packets that have a MAC address within the given range   |
 | IPv4DestinationFilter | Outputs packets that have an IPv4 address within the given range |
 | IPv6DestinationFilter | Outputs packets that have an IPv6 address within the given range |
 
