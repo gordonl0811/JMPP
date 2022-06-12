@@ -21,7 +21,7 @@ The JMPP library is also built on the lightweight [pkts.io Java library develope
 
 ## User Guide
 
-Processors consist of `Readers`, `Components`, and `Outputters`. `Disruptors` are used to pass `Packets` between the different objects, which serve as alternatives to classic `Queue` implementations.
+Processors consist of `Readers` and `Components`. `Disruptors` are used to pass `Packets` between the different objects, which serve as alternatives to classic `Queue` implementations.
 
 The following sections describe these core concepts, their roles within JMPP, and how to tie them together into a new Processor.
 
@@ -104,7 +104,7 @@ The separation of these processes allows for easier benchmarking, as demonstrate
 
 #### Building Processor Classes
 
-For the sake of brevity, "components" refers to `Readers`, `Components` and `Outputters`.
+For the sake of brevity, "components" refers to both `Readers` and `Components``.
 
 The `Processor` attributes will be the components in the processor design. The class constructor signature would typically include the following:
 
