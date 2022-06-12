@@ -104,7 +104,7 @@ The separation of these processes allows for easier benchmarking, as demonstrate
 
 #### Building Processor Classes
 
-For the sake of brevity, "components" refers to both `Readers` and `Components``.
+For the sake of brevity, "components" refers to both `Readers` and `Components`.
 
 The `Processor` attributes will be the components in the processor design. The class constructor signature would typically include the following:
 
