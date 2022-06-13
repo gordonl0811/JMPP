@@ -130,12 +130,12 @@ Note: it is the user's responsibility to ensure that the architecture of the pro
 
 #### Example: Redirecting TCP and UDP packets
 
-A slightly more complex (and perhaps realistic) example can be used to showcase the flexibility of the library.
+A slightly more complex example can be used to showcase the flexibility of the library.
 
 Considering the following requirements of a processor:
 - A stream of packets containing a mixture of TCP and UDP packets are received, with destinations of `127.0.0.1:80/53` respectively.
-- TCP packets are to be redirected to `192.168.0.11:80`
-- UDP packets are to be redirected to `192.168.0.22:53`
+- TCP packets are to be redirected to `192.168.0.11`
+- UDP packets are to be redirected to `192.168.0.22`
 
 The following diagram shows the architecture of a processor that can carry this out:
 
@@ -168,17 +168,60 @@ public static void main(String[] args) throws IOException, InterruptedException 
 
 Notice that the processor expects 10 packets, and will terminate when the Writer processes them all.
 
-WireShark can be used to decode the input Pcap (generated with Scapy), [`input_10.pcap`](src/main/resources/inputs/input_10.pcap), which contains the following packets:
+WireShark can be used to decode the input PCAP (generated with Scapy), [`input_10.pcap`](src/main/resources/inputs/input_10.pcap), which contains the following packets:
 
 ![](images/ExampleInputPackets.png)
  
-After running the processor, the output Pcap generated shows how the packets have been modified. The packets are out of order, but can be mapped based on the "time" column:
+After running the processor, the output PCAP generated shows how the packets have been modified. The packets are out of order, but can be mapped based on the "time" column:
 
 ![](images/ExampleOutputPackets.png)
 
 ## Benchmarks
 
-TODO
+### Setup
+
+The Java Microbenchmark Harness (JMH) was used to measure the performance of the application, with the focus being the time taken between a packet entering the processor to the moment it is outputted by the Processor.
+
+The key to obtaining trustworthy benchmarks is to isolate this hot path of the application and measure its execution multiple times. JMPP was designed with this in mind, with the compartmentalisation of its life-cycle allowing users to measure the execution time of a batch of packets without accounting for the setup and tear-down time penalties.
+
+The high-performing `java.util.concurrent.ArrayBlockingQueue` was used to compare the performance of the application with an alternative data structure to the Disruptor. This required the application to be completely re-implemented with the queue; the unorthodox API of the Disruptor meant that a slightly different approach had to be taken with sending/receiving packets. The Disruptor also had extra functionality, particularly the ability to multicast events to its consumers.
+
+The main changes included:
+- Individual components implemented the `Runnable` interface and treated as threads
+- Initialisation involved wrapping components into `Threads` and starting them
+- Each component would poll the queue to receive packets
+- Shutdown involved cleaning `Threads` up by interrupting them
+- Multicasting was replicated with a dedicated component that iterated through queues and pushed packets to all of them
+
+JMH has two distinct stages for running benchmarks in addition to the measurement of each execution, conducted via Java annotations. The "Setup" stage allowed for Processors to be created and initialised, and "Teardown" allowed Processors to be cleaned up gracefully. This meant that only the `start()` function was measured; the moment the first packet entered the Processor, until the last packet was processed.
+
+### Results
+
+Three different setups were benchmarked, illustrated by the diagram below. Droppers were used as the final component instead of writers because of the significant overhead introduced from interacting with files. This section reports the results of benchmarking each Processor design.
+
+![](images/BenchmarkDiagrams.png)
+
+#### Pipeline
+
+The results for the Processor with a simple pipeline indicated a significant performance improvement using the Disruptor-based approach. The Processor observed a 70% decrease in execution time with a batch of 100 packets, which stabilised from 10000 packets onwards with a reduction of just over 30%.
+
+![](images/PipelineResults.png)
+
+#### Multiple Consumers
+
+Similar to the previous section, the Pipeline with multiple consumers demonstrated a notable benefit from using the Disruptor. Execution times were consistently reduced by around 70% (the charts do not intuitively reflect this as the vertical axis is using a log scale).
+
+![](images/MultipleConsumerResults.png)
+
+#### Multiple Producers
+
+The processor with multiple producers generates rather counter-intuitive numbers, with the implementation with queues outperforming the Disruptor-based implementation as the batch of packets increases in size.
+
+There are a few possible explanations for this result. The Disruptor's technical guide explicitly states that the greatest performance benefits come from using a single-writer principle. This principle suggests that a single producer will be more effective than multiple producers writing to a shared data location. This is because of the overhead associated with using locks and other concurrency mechanisms, which multiple producers will need to use to maintain functional correctness by eliminating data races. Disruptors with multiple producers will suffer a performance hit compared to their single-writer alternatives.
+
+Another possible reason could be a failure to carefully benchmark the Disruptor-based implementation, with setup/teardown overheads being bundled into the timed execution. In contrast, the thread-based approach of the queue implementation may be better isolated than its counterpart.
+
+![](images/MultipleProducerResults.png)
 
 ## Future Work
 
