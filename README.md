@@ -11,11 +11,11 @@ A lightweight Java library for processing network packets with a user-defined gr
 
 ## Overview
 
-The Java Modular Packet Processor (JMPP) library is part of a Final Year Project (Programming Strategies for Low-Latency Applications) for the Computing BEng at Imperial College London.
+The Java Modular Packet Processor (JMPP) library is part of a Final Year Project (Programming Strategies for Low-Latency Applications) for the Computing BEng at Imperial College London. This library is not intended for production-level applications, but to be a supplementary educational resource that demonstrates the quantitative advantages of using appropriate data structures. See the [LowLatencyProgramming repository](https://github.com/gordonl0811/LowLatencyProgramming), which dives more into strategies for achieving lower latencies within applications.
 
 The JMPP library allows users to create variations of `Processors`, consisting of `Components` that perform different operations on packets. These components are interchangeable, allowing users to specify a network of components to route packets through with a graph-like structure.
 
-The project is not built for production, but instead has a broader objective that aligns with the purpose of the university project. Packets are passed between components using the [LMAX Disruptor](https://lmax-exchange.github.io/disruptor/), a sophisticated data structure designed to replace queues used in typical producer-consumer design patterns. JMPP contains reproducible benchmarks (collected using the Java Microbenchmark Harness) that demonstrate the advantages of the Disruptor over the high-performing `java.util.concurrent.ArrayBlockingQueue`.
+This library uses a lock-free data structure to replace queues, emphasising how minimising resource contention leads to a substantial increase in performance.  Packets are passed between components using the [LMAX Disruptor](https://lmax-exchange.github.io/disruptor/), a sophisticated data structure created for typical producer-consumer design patterns. JMPP has been benchmarked (collected using the Java Microbenchmark Harness) to demonstrate the advantages of the Disruptor over the high-performing `java.util.concurrent.ArrayBlockingQueue`. The code for these benchmarks can be found in the repository mentioned above.
 
 The JMPP library is also built on the lightweight [pkts.io Java library developed by aboutsip](https://github.com/aboutsip/pkts).
 
