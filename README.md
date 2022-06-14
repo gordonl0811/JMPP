@@ -225,4 +225,16 @@ Another possible reason could be a failure to carefully benchmark the Disruptor-
 
 ## Future Work
 
-TODO
+As stated earlier, this library is not intended for production as there are many shortfalls in performance that would be expected from a low-latency application/tool. There are a few key improvements that can be made.
+
+### Functionality for receiving/sending packets
+
+PCAPs are the only source of packets that can be used by this library. Real-world applications will require packet reading/sending with POSIX sockets, or hardware for greater performance.
+
+### High performing underlying infrastructure
+
+JMPP library is built on the lightweight [pkts.io Java library developed by aboutsip], which is severely limited in its capabilities outside decoding PCAP files. To achieve performance that can keep up with the capabilities of modern hardware, the library could use kernel bypassing libraries/tools such as [DPDK](https://www.dpdk.org/). Detailed information can be found in the [LowLatencyProgramming repository](https://github.com/gordonl0811/LowLatencyProgramming). This is closely related to the next section.
+
+### Increased packet processing functionality
+
+The limited decoding capabilities of the pkts.io library has also impacted the range of `Components` that could be developed. There does not seem to be a fast, Java-based decoding library for packets; this would need to be implemented manually, handling raw packet data in the form of bytes.
